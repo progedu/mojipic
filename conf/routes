@@ -1,0 +1,22 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# https://www.playframework.com/documentation/latest/ScalaRouting
+# ~~~~
+
+# An example controller showing a sample home page
+GET     /                           controllers.HomeController.index
+
+# Twitter Login
+GET     /login                         controllers.OAuthController.login
+GET     /logout                        controllers.OAuthController.logout
+GET     /oauth_callback                controllers.OAuthController.oauthCallback(oauth_verifier: Option[String])
+
+# REST API
++ nocsrf
+POST    /pictures                      controllers.PicturesController.post
+GET     /pictures/:pictureId           controllers.PicturesController.get(pictureId: Long)
+GET     /properties                    controllers.PropertiesController.getAll(last_created_time: Option[String])
+GET     /users/:twitterId/properties   controllers.UsersController.getProperties(twitterId: Long, last_created_time: Option[String])
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

@@ -1,0 +1,87 @@
+@(accessToken: Option[twitter4j.auth.AccessToken])
+
+
+@main("MOJIPIC - 写真に文字を書き加え") {
+
+<nav class="light-blue lighten-4" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo"><img src="@routes.Assets.versioned("images/logo.png")"></img></a>
+        <ul class="right hide-on-med-and-down">
+            <li>
+                @if(accessToken.isEmpty) {
+                <a class="light-blue-text text-darken-3" href="/login">twitterでログイン</a>
+                } else {
+                <a class="light-blue-text text-darken-3" href="/logout">ログアウト</a>
+                }
+            </li>
+        </ul>
+
+        <ul id="nav-mobile" class="side-nav">
+            <li>
+                @if(accessToken.isEmpty) {
+                <a href="/login">twitterでログイン</a>
+                } else {
+                <a href="/logout">ログアウト</a>
+                }
+            </li>
+        </ul>
+        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+</nav>
+@if(accessToken.isDefined) {
+<div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+        <br><br>
+        <h3 class="header center blue-text">画像をドラッグ＆ドロップ</h3>
+        <div class="row center">
+            <h5 class="header col s12 light">ドロップエリアにjpg画像かpng画像をドロップしてください</h5>
+        </div>
+        <div class="row center">
+            <div class="input-field col s12">
+                <input class="validate" type="text" id="overlaytext-shown" name="overlaytext-shown" maxlength="20" value="LGTM">
+                <label class="active" for="overlaytext-shown">テロップ</label>
+            </div>
+        </div>
+        <div class="row center">
+            <div class="input-field col s2">
+                <input class="validate" type="text" id="overlaytextsize-shown" name="overlaytextsize-shown" maxlength="5" value="60">
+                <label class="active" for="overlaytextsize-shown">文字サイズ (pt)</label>
+            </div>
+        </div>
+        <div class="row center">
+            <div class="col s12 blue z-depth-5">
+                <form action="/pictures" class="dropzone" id="filedropzone">
+                    <h2 class="blue-text text-lighten-5"> ドロップエリア </h2>
+                    <input type="hidden" id="overlaytext" name="overlaytext">
+                    <input type="hidden" id="overlaytextsize" name="overlaytextsize">
+                </form>
+            </div>
+        </div>
+        <br><br>
+
+    </div>
+</div>
+}
+<div class="divider"></div>
+
+<div class="container">
+    <h3 class="header center blue-text">画像一覧</h3>
+    <div id="picture-grid" class="row center">
+    </div>
+</div>
+<footer class="page-footer light-blue lighten-4">
+    </div>
+    <div class="footer-copyright">
+        <div class="container">
+            <a class="light-blue-text text-darken-3" href="https://nnn.ed.nico">このアプリケーションはN予備校により提供されています。</a>
+        </div>
+    </div>
+</footer>
+<script>
+    var Mojipic = (function(){
+    var accessTokenUserId = @Html(accessToken.map(t => s""""${t.getUserId}"""").getOrElse("null"));
+        return {
+            twitterId : function(){return accessTokenUserId;}
+        };
+    })();
+</script>
+}
