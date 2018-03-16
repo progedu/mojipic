@@ -18,7 +18,19 @@ module.exports = {
                 ['env', {'modules': false}],
                 'react'
               ]
-            }
+            },
+  module: {
+    rules: [{
+      test: /.js$/,
+      exclude: /node_modules/,
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: ['es2015']
+        }
+      }
+    }]
+  }
           }
         ],
         // node_modules は除外する
