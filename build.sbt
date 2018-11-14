@@ -5,7 +5,7 @@ version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
-scalaVersion := "2.12.3"
+scalaVersion := "2.12.7"
 
 libraryDependencies += guice
 libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test
@@ -19,6 +19,7 @@ libraryDependencies += "org.scalikejdbc" %% "scalikejdbc-play-dbapi-adapter" % "
 libraryDependencies += "mysql" % "mysql-connector-java" % "5.1.36"
 libraryDependencies += "net.debasishg" %% "redisclient" % "3.4"
 libraryDependencies += "org.im4java" % "im4java" % "1.4.0"
+libraryDependencies += "javax.xml.bind" % "jaxb-api" % "2.3.1"
 
 // Adds additional packages into Twirl
 //TwirlKeys.templateImports += "jp.ed.nnn.controllers._"
