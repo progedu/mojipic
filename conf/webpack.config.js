@@ -19,7 +19,19 @@ module.exports = {
                 ['@babel/preset-env', { 'modules': false }],
                 '@babel/preset-react'
               ]
-            }
+            },
+  module: {
+    rules: [{
+      test: /.js$/,
+      exclude: /node_modules/,
+      use: {
+        loader: 'babel-loader',
+        options: {
+          presets: ['env']
+        }
+      }
+    }]
+  }
           }
         ],
         // node_modules は除外する
