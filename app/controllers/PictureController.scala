@@ -8,7 +8,7 @@ import javax.inject.{Inject, Singleton}
 import akka.stream.scaladsl.FileIO
 import com.google.common.net.MediaType
 import com.redis.RedisClient
-import domain.entity.{PictureId, PictureProperty, TwitterId}
+import domain.entity.{PictureId, PictureProperty, GitHubId}
 import domain.repository.PicturePropertyRepository
 import infrastructure.redis.RedisKeys
 import play.api.cache.SyncCacheApi
@@ -42,7 +42,7 @@ class PicturesController @Inject()(
 
             val originalFilepath =  FileSystems.getDefault.getPath(storeDirPath.toString, System.currentTimeMillis().toString)
             Files.copy(file.ref.path, originalFilepath, StandardCopyOption.COPY_ATTRIBUTES)
-            val propertyValue = createPicturePropertyValue(TwitterId(accessToken.getUserId), file, form, originalFilepath)
+            val propertyValue = createPicturePropertyValue(GitHubId(accessToken.getUserId), file, form, originalFilepath)
             val pictureId = picturePropertyRepository.create(propertyValue)
             pictureId.map({ (id) =>
               redisClient.rpush(RedisKeys.Tasks, id.value)
@@ -56,7 +56,7 @@ class PicturesController @Inject()(
   }
 
   private[this] def createPicturePropertyValue(
-                                                twitterId: TwitterId,
+                                                twitterId: GitHubId,
                                                 file: FilePart[TemporaryFile],
                                                 form: MultipartFormData[TemporaryFile],
                                                 originalFilePath: Path

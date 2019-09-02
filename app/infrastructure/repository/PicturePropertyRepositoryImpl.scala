@@ -3,7 +3,7 @@ package infrastructure.repository
 import java.time.LocalDateTime
 
 import com.google.common.net.MediaType
-import domain.entity.{PictureId, PictureProperty, TwitterId}
+import domain.entity.{PictureId, PictureProperty, GitHubId}
 import domain.repository.PicturePropertyRepository
 import scalikejdbc._
 
@@ -72,7 +72,7 @@ class PicturePropertyRepositoryImpl extends PicturePropertyRepository {
     val value =
       PictureProperty.Value(
         PictureProperty.Status.parse(rs.string("status")).get,
-        TwitterId(rs.long("twitter_id")),
+        GitHubId(rs.long("twitter_id")),
         rs.string("file_name"),
         MediaType.parse(rs.string("content_type")),
         rs.string("overlay_text"),
@@ -106,7 +106,7 @@ class PicturePropertyRepositoryImpl extends PicturePropertyRepository {
       }
     })
 
-  def findAllByTwitterIdAndDateTime(twitterId: TwitterId, toDateTime: LocalDateTime): Future[Seq[PictureProperty]] =
+  def findAllByTwitterIdAndDateTime(twitterId: GitHubId, toDateTime: LocalDateTime): Future[Seq[PictureProperty]] =
     Future.fromTry(Try {
       using(DB(ConnectionPool.borrow())) { db =>
         db.readOnly { implicit session =>
