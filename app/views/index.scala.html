@@ -1,4 +1,4 @@
-@(isAuthenticated: Boolean)
+@(isAuthenticated: Boolean, profile: Option[org.pac4j.core.profile.CommonProfile])
 
 
 @main("MOJIPIC - 写真に文字を書き加え") {
@@ -76,4 +76,19 @@
         </div>
     </div>
 </footer>
+<script>
+    var Mojipic = (function(){
+        var userId = @profile match {
+            case Some(profile) => {
+                return profile.getId()
+            }
+            case None => {
+                return null
+            }
+        }
+        return {
+            twitterId : function(){return userId;}
+        };
+    })();
+</script>
 }

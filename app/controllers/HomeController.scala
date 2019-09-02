@@ -7,6 +7,8 @@ import org.pac4j.play.scala.Security
 import play.api.cache.SyncCacheApi
 import play.api.mvc._
 
+import scala.compat.java8.OptionConverters._
+
 /**
  * This controller creates an `Action` to handle HTTP requests to the
  * application's home page.
@@ -29,7 +31,14 @@ class HomeController @Inject()(val cache: SyncCacheApi,
     profileManager.isAuthenticated
   }
 
+  private def getProfile(implicit request: RequestHeader): Option[CommonProfile] = {
+    val webContext = new PlayWebContext(request, playSessionStore)
+    val profileManager = new ProfileManager[CommonProfile](webContext)
+    val profile = profileManager.get(true)
+    profile.asScala
+  }
+
   def index() = Action { implicit request =>
-    Ok(views.html.index(isAuthenticated(request)))
+    Ok(views.html.index(isAuthenticated(request), getProfile(request)))
   }
 }

@@ -58,8 +58,8 @@ class Pictures extends React.Component {
 
   updatePictures() {
     var url = '';
-    if (Mojipic.twitterId()) { // 認証時
-      url = `/users/${Mojipic.twitterId().toString()}/properties`;
+    if (Mojipic.githubId()) { // 認証時
+      url = `/users/${Mojipic.githubId()}/properties`;
     } else { // 非認証時
       url = '/properties';
     }

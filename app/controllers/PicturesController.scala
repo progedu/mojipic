@@ -62,7 +62,7 @@ class PicturesController @Inject()(
             Future.successful(Ok("Picture uploaded."))
           case _ => Future.successful(Unauthorized("Need picture data."))
         }
-      case _ => Future.successful(Unauthorized("Need to login by Twitter and picture data."))
+      case _ => Future.successful(Unauthorized("Need to login by GitHub and picture data."))
     }
   }
 
