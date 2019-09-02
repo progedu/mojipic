@@ -35,13 +35,13 @@ trait PicturePropertyRepository {
 
 
   /**
-    * 投稿者のTwitter IDと最後に読み込まれた作成日時から画像のプロパティを読み込む
+    * 投稿者のGitHub IDと最後に読み込まれた作成日時から画像のプロパティを読み込む
     *
-    * @param twitterId       投稿者のTwitter ID
+    * @param githubId       投稿者のGitHub ID
     * @param lastCreatedTime 最後に読み込まれた作成日時
     * @return Future.successful(Seq(PictureProperty)) 読み込みに成功した
     */
-  def findAllByTwitterIdAndDateTime(twitterId: GitHubId, lastCreatedTime: LocalDateTime): Future[Seq[PictureProperty]]
+  def findAllByGitHubIdAndDateTime(githubId: GitHubId, lastCreatedTime: LocalDateTime): Future[Seq[PictureProperty]]
 
   /**
     * 最後に読み込まれた作成日時から画像のプロパティを読み込む

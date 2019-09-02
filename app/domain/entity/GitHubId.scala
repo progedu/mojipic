@@ -8,7 +8,7 @@ import play.api.libs.json.Writes
   *
   * @param value GitHub IDの値
   */
-case class GitHubId(value: Long)
+case class GitHubId(value: String)
 
 object GitHubId {
   implicit val writes: Writes[GitHubId] = Writes(id => JsString(id.value.toString))
