@@ -29,6 +29,8 @@ class PicturesController @Inject()(
                                     clock: Clock,
                                     executionContext: ExecutionContext,
                                     val cache: SyncCacheApi,
+                                    picturePropertyRepository: PicturePropertyRepository,
+                                    redisClient: RedisClient
                                   ) extends Security[CommonProfile] {
 
   private def getProfile(implicit request: RequestHeader): Option[CommonProfile] = {
@@ -86,8 +88,8 @@ class PicturesController @Inject()(
       LocalDateTime.now(clock))
   }
 
-  def get(pictureId: Long) = Action.async { request =>
-    val pictureProperty = PicturePropertyRepository.find(PictureId(pictureId))
+  def get(pictureId: Long) = Action.async {
+    val pictureProperty = picturePropertyRepository.find(PictureId(pictureId))
     pictureProperty.map(pictureProperty => {
       pictureProperty.value.convertedFilepath match {
         case Some(convertedFilepath) => {
