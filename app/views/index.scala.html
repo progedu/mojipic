@@ -78,16 +78,16 @@
 </footer>
 <script>
     var Mojipic = (function(){
-        var userId = @profile match {
-            case Some(profile) => {
-                return profile.getId()
+        var userId = @Html(
+            profile match {
+                case Some(profile) => {
+                    profile.getId()
+                }
+                case None => "null"
             }
-            case None => {
-                return null
-            }
-        }
+        );
         return {
-            twitterId : function(){return userId;}
+            githubId : function(){return userId;}
         };
     })();
 </script>

@@ -14,7 +14,6 @@ import infrastructure.redis.RedisKeys
 import org.pac4j.core.profile.{CommonProfile, ProfileManager}
 import org.pac4j.play.PlayWebContext
 import org.pac4j.play.scala.{Security, SecurityComponents}
-import play.api.cache.SyncCacheApi
 import play.api.http.HttpEntity
 import play.api.libs.Files.TemporaryFile
 import play.api.mvc._
@@ -28,7 +27,6 @@ class PicturesController @Inject()(
                                     val controllerComponents: SecurityComponents,
                                     clock: Clock,
                                     executionContext: ExecutionContext,
-                                    val cache: SyncCacheApi,
                                     picturePropertyRepository: PicturePropertyRepository,
                                     redisClient: RedisClient
                                   ) extends Security[CommonProfile] {

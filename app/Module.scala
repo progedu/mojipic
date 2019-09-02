@@ -23,7 +23,7 @@ class Module(environment: Environment,
   val redisHost = configuration.get[String]("mojipic.redis.host")
   val redisPort = configuration.get[Int]("mojipic.redis.port")
 
-  def configure() = {
+  override def configure() = {
     bind(classOf[PlaySessionStore]).to(classOf[PlayCacheSessionStore])
     bind(classOf[SecurityComponents]).to(classOf[DefaultSecurityComponents])
 

@@ -3,8 +3,7 @@ package controllers
 import javax.inject._
 import org.pac4j.core.profile.{CommonProfile, ProfileManager}
 import org.pac4j.play.PlayWebContext
-import org.pac4j.play.scala.Security
-import play.api.cache.SyncCacheApi
+import org.pac4j.play.scala.{Security, SecurityComponents}
 import play.api.mvc._
 
 import scala.compat.java8.OptionConverters._
@@ -14,8 +13,7 @@ import scala.compat.java8.OptionConverters._
  * application's home page.
  */
 @Singleton
-class HomeController @Inject()(val cache: SyncCacheApi,
-                               cc: ControllerComponents) extends Security[CommonProfile] {
+class HomeController @Inject() (val controllerComponents: SecurityComponents) extends Security[CommonProfile] {
 
   /**
    * Create an Action to render an HTML page.
