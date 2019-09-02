@@ -47,7 +47,7 @@ object PictureProperty {
   /**
     * 画像のプロパティの値
     * @param status 画像のステータス
-    * @param twitterId 投稿者のTwitter ID
+    * @param githubId 投稿者のGitHub ID
     * @param fileName 投稿された画像のファイル名
     * @param contentType 投稿された画像のContent-Type
     * @param overlayText 変換に使われるテキスト
@@ -58,7 +58,7 @@ object PictureProperty {
     */
   case class Value(
                     status: Status,
-                    twitterId: TwitterId,
+                    githubId: GitHubId,
                     fileName: String,
                     contentType: MediaType,
                     overlayText: String,

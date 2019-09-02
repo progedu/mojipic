@@ -8,9 +8,10 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 scalaVersion := "2.12.7"
 
 libraryDependencies += guice
-libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test
+libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "4.0.3" % Test
 libraryDependencies += ehcache
-libraryDependencies += "org.twitter4j" % "twitter4j-core" % "4.0.6"
+libraryDependencies += "org.pac4j" %% "play-pac4j" % "8.0.0"
+libraryDependencies += "org.pac4j" % "pac4j-oauth" % "3.7.0"
 libraryDependencies += jdbc
 libraryDependencies += evolutions
 libraryDependencies += "org.scalikejdbc" %% "scalikejdbc"  % "3.0.2"

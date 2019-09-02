@@ -3,7 +3,7 @@ package infrastructure.repository
 import java.time.LocalDateTime
 
 import com.google.common.net.MediaType
-import domain.entity.{PictureId, PictureProperty, TwitterId}
+import domain.entity.{PictureId, PictureProperty, GitHubId}
 import domain.repository.PicturePropertyRepository
 import scalikejdbc._
 
@@ -19,7 +19,7 @@ class PicturePropertyRepositoryImpl extends PicturePropertyRepository {
           val sql =
             sql"""INSERT INTO picture_properties (
                  | status,
-                 | twitter_id,
+                 | github_id,
                  | file_name,
                  | content_type,
                  | overlay_text,
@@ -29,7 +29,7 @@ class PicturePropertyRepositoryImpl extends PicturePropertyRepository {
                  | created_time
                  | ) VALUES (
                  | ${value.status.value},
-                 | ${value.twitterId.value},
+                 | ${value.githubId.value},
                  | ${value.fileName},
                  | ${value.contentType.toString},
                  | ${value.overlayText},
@@ -52,7 +52,7 @@ class PicturePropertyRepositoryImpl extends PicturePropertyRepository {
             sql"""SELECT
                  | picture_id,
                  | status,
-                 | twitter_id,
+                 | github_id,
                  | file_name,
                  | content_type,
                  | overlay_text,
@@ -72,7 +72,7 @@ class PicturePropertyRepositoryImpl extends PicturePropertyRepository {
     val value =
       PictureProperty.Value(
         PictureProperty.Status.parse(rs.string("status")).get,
-        TwitterId(rs.long("twitter_id")),
+        GitHubId(rs.string("github_id")),
         rs.string("file_name"),
         MediaType.parse(rs.string("content_type")),
         rs.string("overlay_text"),
@@ -91,7 +91,7 @@ class PicturePropertyRepositoryImpl extends PicturePropertyRepository {
           val sql =
             sql"""UPDATE picture_properties SET
                  | status =  ${value.status.value},
-                 | twitter_id = ${value.twitterId.value},
+                 | github_id = ${value.githubId.value},
                  | file_name = ${value.fileName},
                  | content_type = ${value.contentType.toString},
                  | overlay_text = ${value.overlayText},
@@ -106,7 +106,7 @@ class PicturePropertyRepositoryImpl extends PicturePropertyRepository {
       }
     })
 
-  def findAllByTwitterIdAndDateTime(twitterId: TwitterId, toDateTime: LocalDateTime): Future[Seq[PictureProperty]] =
+  def findAllByGitHubIdAndDateTime(githubId: GitHubId, toDateTime: LocalDateTime): Future[Seq[PictureProperty]] =
     Future.fromTry(Try {
       using(DB(ConnectionPool.borrow())) { db =>
         db.readOnly { implicit session =>
@@ -114,7 +114,7 @@ class PicturePropertyRepositoryImpl extends PicturePropertyRepository {
             sql"""SELECT
                  | picture_id,
                  | status,
-                 | twitter_id,
+                 | github_id,
                  | file_name,
                  | content_type,
                  | overlay_text,
@@ -123,7 +123,7 @@ class PicturePropertyRepositoryImpl extends PicturePropertyRepository {
                  | converted_filepath,
                  | created_time
                  | FROM picture_properties
-                 | WHERE twitter_id = ${twitterId.value} AND created_time > ${toDateTime} ORDER BY created_time DESC
+                 | WHERE github_id = ${githubId.value} AND created_time > ${toDateTime} ORDER BY created_time DESC
               """.stripMargin
           sql.map(resultSetToPictureProperty).list().apply()
         }
@@ -138,7 +138,7 @@ class PicturePropertyRepositoryImpl extends PicturePropertyRepository {
             sql"""SELECT
                  | picture_id,
                  | status,
-                 | twitter_id,
+                 | github_id,
                  | file_name,
                  | content_type,
                  | overlay_text,

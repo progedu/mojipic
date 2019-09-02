@@ -6,17 +6,17 @@
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index
 
-# Twitter Login
+# GitHub Login
 GET     /login                         controllers.OAuthController.login
-GET     /logout                        controllers.OAuthController.logout
-GET     /oauth_callback                controllers.OAuthController.oauthCallback(oauth_verifier: Option[String])
+GET     /logout                        @org.pac4j.play.LogoutController.logout()
+GET     /oauth_callback                @org.pac4j.play.CallbackController.callback()
 
 # REST API
 + nocsrf
 POST    /pictures                      controllers.PicturesController.post
 GET     /pictures/:pictureId           controllers.PicturesController.get(pictureId: Long)
 GET     /properties                    controllers.PropertiesController.getAll(last_created_time: Option[String])
-GET     /users/:twitterId/properties   controllers.UsersController.getProperties(twitterId: Long, last_created_time: Option[String])
+GET     /users/:githubId/properties   controllers.UsersController.getProperties(githubId: String, last_created_time: Option[String])
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

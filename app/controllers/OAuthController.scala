@@ -1,49 +1,22 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
+import org.pac4j.core.client.IndirectClient
+import org.pac4j.core.credentials.Credentials
+import org.pac4j.core.profile.CommonProfile
+import org.pac4j.play.PlayWebContext
+import org.pac4j.play.scala.{Security, SecurityComponents}
+import play.api.mvc.Session
 
-import infrastructure.twitter.{TwitterAuthenticator, TwitterException}
-import play.api.Configuration
-import play.api.cache.SyncCacheApi
-import play.api.mvc.ControllerComponents
-
-import scala.concurrent.duration._
+import scala.collection.JavaConverters._
 
 @Singleton
-class OAuthController @Inject()(
-                                 cc: ControllerComponents,
-                                 twitterAuthenticator: TwitterAuthenticator,
-                                 configuration: Configuration,
-                                 val cache: SyncCacheApi
-                               ) extends TwitterLoginController(cc) {
-
-  val documentRootUrl = configuration.get[String]("mojipic.documentrooturl")
-
-  def login = TwitterLoginAction { request =>
-    try {
-      val callbackUrl = documentRootUrl + routes.OAuthController.oauthCallback(None).url
-      val authenticationUrl = twitterAuthenticator.startAuthentication(request.sessionId, callbackUrl)
-      Redirect(authenticationUrl)
-    } catch {
-      case e: TwitterException => BadRequest(e.message)
-    }
-  }
-
-  def oauthCallback(verifierOpt: Option[String]) = TwitterLoginAction { request =>
-    try {
-      verifierOpt.map(twitterAuthenticator.getAccessToken(request.sessionId, _)) match {
-        case Some(accessToken) =>
-          cache.set(request.sessionId, accessToken, 30.minutes)
-          Redirect(documentRootUrl + routes.HomeController.index().url)
-        case None => BadRequest(s"Could not get OAuth verifier. SessionId: ${request.sessionId}")
-      }
-    } catch {
-      case e: TwitterException => BadRequest(e.message)
-    }
-  }
-
-  def logout = TwitterLoginAction { request =>
-    cache.remove(request.sessionId)
-    Redirect(documentRootUrl + routes.HomeController.index().url)
+class OAuthController @Inject() (val controllerComponents: SecurityComponents) extends Security[CommonProfile] {
+  def login = Action { request =>
+    val context: PlayWebContext = new PlayWebContext(request, playSessionStore)
+    val client = config.getClients.findClient("GitHubClient").asInstanceOf[IndirectClient[Credentials,CommonProfile]]
+    val location = client.getRedirectAction(context).getLocation
+    val newSession = new Session(mapAsScalaMap(context.getJavaSession).toMap)
+    Redirect(location).withSession(newSession)
   }
 }
