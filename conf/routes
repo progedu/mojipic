@@ -8,8 +8,8 @@ GET     /                           controllers.HomeController.index
 
 # Twitter Login
 GET     /login                         controllers.OAuthController.login
-GET     /logout                        controllers.OAuthController.logout
-GET     /oauth_callback                controllers.OAuthController.oauthCallback(oauth_verifier: Option[String])
+GET     /logout                        @org.pac4j.play.LogoutController.logout()
+GET     /oauth_callback                @org.pac4j.play.CallbackController.callback()
 
 # REST API
 + nocsrf
