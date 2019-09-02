@@ -1,7 +1,9 @@
 package controllers
 
 import javax.inject._
-
+import org.pac4j.core.profile.{CommonProfile, ProfileManager}
+import org.pac4j.play.PlayWebContext
+import org.pac4j.play.scala.Security
 import play.api.cache.SyncCacheApi
 import play.api.mvc._
 
@@ -11,7 +13,7 @@ import play.api.mvc._
  */
 @Singleton
 class HomeController @Inject()(val cache: SyncCacheApi,
-                               cc: ControllerComponents) extends TwitterLoginController(cc) {
+                               cc: ControllerComponents) extends Security[CommonProfile] {
 
   /**
    * Create an Action to render an HTML page.
@@ -20,7 +22,14 @@ class HomeController @Inject()(val cache: SyncCacheApi,
    * will be called when the application receives a `GET` request with
    * a path of `/`.
    */
-  def index() = TwitterLoginAction { implicit request: TwitterLoginRequest[AnyContent] =>
-    Ok(views.html.index(request.accessToken))
+
+  private def isAuthenticated(implicit request: RequestHeader): Boolean = {
+    val webContext = new PlayWebContext(request, playSessionStore)
+    val profileManager = new ProfileManager[CommonProfile](webContext)
+    profileManager.isAuthenticated
+  }
+
+  def index() = Action { implicit request =>
+    Ok(views.html.index(isAuthenticated(request)))
   }
 }
